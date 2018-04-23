@@ -45,7 +45,8 @@ void setup()
   
   // setup interrupt services
   attachInterrupt(digitalPinToInterrupt(hallSensorPin), hallSensorISR, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(photoSensorPin), photoSensorISR, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(photoSensorPin), photoSensorISR, FALLING);
+  
   Serial.begin(9600);
 }
 
@@ -59,7 +60,10 @@ void loop() {
 //  if (controller->triggerCount > 0) 
 //  {
 //    if (controller->isStable() && millis() >= controller->releaseTimeStart && millis() <= controller->releaseTimeEnd)
+//    {
 //      controller->releaseBall();
+//      controller->decreaseTriggerCount();
+//    }
 //    else if (controller->isStable()) 
 //      controller->updateReleaseTime();
       /*
@@ -87,34 +91,22 @@ void loop() {
 
 void hallSensorISR() 
 {
+  Serial.print("Time: ");
+  Serial.print(millis());
+  Serial.print(" hallsensor: ");
+  Serial.println(hallSensor->getValue());
+  
   controller->updateHallBuffer(millis());
-  
-  // set led1 as output signal for hall sensor
-  if (hallSensor->getValue() == 1)
-    led1->setValue(HIGH);
-  else
-    led1->setValue(LOW);
-  
-//  Serial.print("Time: ");
-//  Serial.print(millis());
-//  Serial.print(" HallSensor: ");
-//  Serial.println(hallSensor->getValue());
 }
 
 void photoSensorISR() 
 {
-  // set led2 as output signal for photo sensor
-  if (photoSensor->getValue() == 1) 
-    led2->setValue(HIGH);
-  else 
-  {
-    // if falling flank, reset the buffer flag of hall sensor buffer
-    controller->resetBufferFlag();
-    led2->setValue(LOW);
-  }
+  Serial.print("Time: ");
+  Serial.print(millis());
+  Serial.print(" photoSensor: ");
+  Serial.println(photoSensor->getValue());
   
-//  Serial.print("Time: ");
-//  Serial.print(millis());
-//  Serial.print(" PhotoSensor: ");
-//  Serial.println(photoSensor->getValue());
+  controller->resetBufferFlag();
+  
+  controller->lastPhotoPoint = millis();
 }

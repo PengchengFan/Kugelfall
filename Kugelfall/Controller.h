@@ -29,14 +29,21 @@ class Controller
     // end of the time interval for releaseing a ball
     unsigned long releaseTimeEnd;
     
+    // store the lastest time point of falling flank of photo sensor 
+    // also as the start point for computing the releasing time 
+    unsigned long lastPhotoPoint;
+    
     // store new data in hall sensor buffer
     void updateHallBuffer(unsigned long timePoint);
     
     // store new data in photo sensor buffer
 //    void updatePhotoBuffer(unsigned long timePoint);
 
-    // if trigger is pulled, increase the count
+    // if trigger is pulled, increase the count for one
     void increaseTriggerCount();
+
+    // if ball is released, decrese the count for one
+    void decreaseTriggerCount();
     
     // to calculate if the rotation is stable
     boolean isStable();
@@ -59,9 +66,6 @@ class Controller
 
     // store the last time point of hall sensor buffer being updated
     unsigned long lastHallPoint;
-    
-    // store the last time point of photo sensor buffer being updated
-//    unsigned long lastPhotoPoint;
 
     // pointer of servo
     Servomotor *_servo;

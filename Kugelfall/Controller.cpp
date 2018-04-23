@@ -17,13 +17,13 @@ Controller::Controller(Servomotor *servo)
 
 void Controller::updateHallBuffer(unsigned long timePoint) 
 {
+  hallFlag = (hallFlag + 1) % HALLBUFFER_SIZE;
+  
   unsigned long timeInterval = timePoint - lastHallPoint;
   
   lastHallPoint = timePoint;
   
   hallBuffer[hallFlag] = timeInterval;
-  
-//  hallFlag = (hallFlag + 1) % HALLBUFFER_SIZE;
 }
 
 //void Controller::updatePhotoBuffer(unsigned long timePoint) 
@@ -42,6 +42,11 @@ void Controller::increaseTriggerCount()
   triggerCount++;
 }
 
+void Controller::decreaseTriggerCount()
+{
+  triggerCount--;
+}
+
 boolean Controller::isStable() 
 {
   
@@ -49,9 +54,11 @@ boolean Controller::isStable()
 
 void Controller::updateReleaseTime() 
 {
+  unsigned long delta = hallBuffer[hallFlag];
+//  unsigned long releaseTimeStart = 
 //  releaseTimeStart = result;
 
-//  releaseTimeEnd = releaseTimeStart + photoBuffer[photoFlag]
+//  releaseTimeEnd = releaseTimeStart + hallBuffer[hallFlag]
 }
 
 void Controller::releaseBall() 
