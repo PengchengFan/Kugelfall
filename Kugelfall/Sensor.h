@@ -3,16 +3,22 @@
 
 #include "Arduino.h"
 
-class Sensor {
+class Sensor 
+{
   public:
     Sensor(int pin);
+    
     int getValue();
+    
     boolean isFalling();
+    
     boolean isRising();
+    
     boolean isChanging();
 
-  private:
+  private:  
     int _pin;
+    
     boolean _status;
 };
 

@@ -36,49 +36,40 @@ void setup() {
 
   attachInterrupt(digitalPinToInterrupt(hallSensorPin), hallSensorISR, CHANGE);
   attachInterrupt(digitalPinToInterrupt(photoSensorPin), photoSensorISR, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(triggerPin), triggerISR, FALLING);
-  attachInterrupt(digitalPinToInterrupt(switchPin), switchISR, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(button1Pin), button1ISR, FALLING);
-  attachInterrupt(digitalPinToInterrupt(button2Pin), button2ISR, FALLING);
-
   Serial.begin(9600);
 }
-
+int count = 0;
 void loop() {
-
+  if (trigger->getValue()) {
+    led1->setValue(HIGH);
+    delay(100);
+    led1->setValue(LOW);
+  }
+  if (Switch->getValue()) {
+    blackled->setValue(HIGH);
+    delay(100);
+    blackled->setValue(LOW);
+  }
+  if (button1->getValue()) {
+    led1->setValue(HIGH);
+    delay(100);
+    led1->setValue(LOW);
+  }
+  if (button2->getValue()) {
+    led2->setValue(HIGH);
+    delay(100);
+    led2->setValue(LOW);
+  }
 }
 
 void hallSensorISR() {
-  Serial.println("Time:" + millis());
-  Serial.println("; Hall value:" + hallSensor->getValue());
-  Serial.println("; Photo value: " + photoSensor->getValue());
-  led1->setValue(HIGH);
+  led2->setValue(HIGH);
+  delay(100);
+  led2->setValue(LOW);
 }
 
 void photoSensorISR() {
-  Serial.println("Time:" + millis());
-  Serial.println("; Hall value:" + hallSensor->getValue());
-  Serial.println("; Photo value: " + photoSensor->getValue());
-  led2->setValue(HIGH);
-}
-
-void triggerISR() {
-  Serial.println("Trigger activated");
   led1->setValue(HIGH);
+  delay(100);
+  led1->setValue(LOW);
 }
-
-void switchISR() {
-  Serial.println("Swtich status: " + Switch->getValue());
-  led1->setValue(HIGH);
-}
-
-void button1ISR() {
-  Serial.println("button1 pressed");
-  led1->setValue(HIGH);
-}
-
-void button2ISR() {
-  Serial.println("button2 pressed");
-  led1->setValue(HIGH);
-}
-
