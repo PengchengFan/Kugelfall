@@ -8,7 +8,7 @@ Controller::Controller(Servomotor *servo)
 
   photoFlag = 0;
 
-  lastHallPoint = 0;
+//  lastHallPoint = 0;
 
   lastPhotoPoint = 0;
 
@@ -17,7 +17,7 @@ Controller::Controller(Servomotor *servo)
 
 void Controller::updateHallBuffer(unsigned long timePoint)
 {
-//  hallFlag = (hallFlag + 1) % HALLBUFFER_SIZE;
+  hallFlag = (hallFlag + 1) % HALLBUFFER_SIZE;
   
 //  unsigned long timeInterval = timePoint - lastHallPoint;
   
@@ -47,10 +47,10 @@ void Controller::decreaseTriggerCount()
   triggerCount--;
 }
 
-boolean Controller::isStable()
-{
-
-}
+//boolean Controller::isStable()
+//{
+//
+//}
 
 void Controller::updateReleaseTime()
 {
@@ -74,7 +74,3 @@ void Controller::resetBufferFlag()
 
   hallFlag = 0;
 }
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes

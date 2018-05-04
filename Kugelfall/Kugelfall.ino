@@ -45,7 +45,7 @@ void setup()
 
   // setup interrupt services
   attachInterrupt(digitalPinToInterrupt(photoSensorPin), photoSensorISR, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(hallSensorPin), hallSensorISR, FALLING);
+  attachInterrupt(digitalPinToInterrupt(hallSensorPin), hallSensorISR, CHANGE);
 
   Serial.begin(9600);
 }
@@ -91,27 +91,23 @@ void loop() {
 
 void photoSensorISR()
 {
-  Serial.print("Time: ");
+  Serial.print("p,");
   Serial.print(millis());
-  Serial.print(" photoSensor: ");
+  Serial.print(",");
   Serial.println(photoSensor->getValue());
-
-  controller->updatePhotoBuffer(millis());
+//  controller->updatePhotoBuffer(millis());
+//  
+//  controller->lastPhotoPoint = millis();
 }
 
 void hallSensorISR()
 {
-  Serial.print("Time: ");
+  Serial.print("h,");
   Serial.print(millis());
-  Serial.print(" hallsensor: ");
+  Serial.print(",");
   Serial.println(hallSensor->getValue());
-  
-  controller->resetBufferFlag();
-<<<<<<< Updated upstream
-  
-  controller->lastPhotoPoint = millis();
-=======
-
-  controller->updateHallBuffer(millis());
->>>>>>> Stashed changes
+//  if (hallSensor->getValue() == 0)
+//    controller->resetBufferFlag();
+//
+//  controller->updateHallBuffer(millis());
 }
