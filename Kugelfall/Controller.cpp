@@ -37,6 +37,19 @@ void Controller::updatePhotoBuffer(unsigned long timePoint)
   photoBuffer[photoFlag] = timeInterval;
 }
 
+void Controller::printPhotoBuffer()
+{
+  int index = photoFlag;
+  
+  for (int i = 0; i < 12; i ++) 
+  {
+    Serial.println(photoBuffer[index]);
+    index--;
+    if (index < 0) 
+      index += 12;
+  }
+}
+
 void Controller::increaseTriggerCount()
 {
   if (triggerCount == 0)

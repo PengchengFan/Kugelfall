@@ -13,9 +13,11 @@ void Servomotor::rotate()
   
   write(END_POS);
   
-  delay(100);
+  delay(150);
   
   write(START_POS);
+
+  delay(150);
   
   detach();
 }

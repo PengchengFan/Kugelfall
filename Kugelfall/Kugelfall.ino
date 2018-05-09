@@ -85,6 +85,14 @@ void loop() {
         controller->increaseTriggerCount();
     }
   }
+  
+  if (button1->getValue() == 1)
+  {
+    Serial.println(1);
+    controller->releaseBall();
+//    controller->printPhotoBuffer();
+  }
+  
 }
 
 void photoSensorISR()

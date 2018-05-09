@@ -36,6 +36,8 @@ class Controller
     // store new data in photo sensor buffer
     void updatePhotoBuffer(unsigned long timePoint);
 
+    void printPhotoBuffer();
+
     // if trigger is pulled, increase the count for one
     void increaseTriggerCount();
 
