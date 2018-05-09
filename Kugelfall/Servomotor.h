@@ -3,11 +3,12 @@
 
 #include "Arduino.h"
 #include "Servo.h"
+#include "Actor.h"
 
 #define START_POS 0
 #define END_POS 20
 
-class Servomotor: public Servo 
+class Servomotor: public Servo, public Actor
 {
   public:
     Servomotor(int pin);

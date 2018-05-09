@@ -39,28 +39,35 @@ void Controller::updatePhotoBuffer(unsigned long timePoint)
 
 void Controller::increaseTriggerCount()
 {
-  triggerCount++;
+  if (triggerCount == 0)
+    triggerCount = 1;
+  else
+    triggerCount = 5;
 }
 
-void Controller::decreaseTriggerCount()
+boolean Controller::decreaseTriggerCount()
 {
   triggerCount--;
+  
+  return triggerCount == 0;
 }
 
-//boolean Controller::isStable()
-//{
-//
-//}
+boolean Controller::isStable()
+{
+  return false;
+}
 
 void Controller::updateReleaseTime()
 {
   unsigned long timeInterval = photoBuffer[photoFlag];
 
   unsigned long startPoint = hallBuffer[hallFlag];
-  
-//  unsigned long releaseTimeStart = hallBuffer[hallFlag] + timeInterval * 12 - DELAY;
 
-//  releaseTimeEnd = releaseTimeStart + delta;
+  unsigned long bias = computeBias();
+  
+  releaseTimeStart = startPoint + timeInterval * 12 - DELAY + bias;
+
+  releaseTimeEnd = releaseTimeStart + timeInterval;
 }
 
 void Controller::releaseBall()
@@ -73,4 +80,9 @@ void Controller::resetBufferFlag()
   photoFlag = 0;
 
   hallFlag = 0;
+}
+
+unsigned long computeBias() 
+{
+  return 0;
 }

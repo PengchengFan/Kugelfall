@@ -1,6 +1,7 @@
 #include "Servomotor.h"
 
-Servomotor::Servomotor(int pin) 
+Servomotor::Servomotor(int pin)
+: Actor(pin)
 {
   _pin = pin;
   write(START_POS);

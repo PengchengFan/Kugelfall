@@ -52,62 +52,50 @@ void setup()
 
 void loop() {
     /*
-     * this part is to decide if to release a ball, to release a ball the following conditions must be met:
-     * 1. at least one ball waiting for being released (trigger count > 0)
-     * 2. current time is between the legal time interval
-     * 3. the rotation is stable
-     */
-//  if (controller->triggerCount > 0)
-//  {
-//    if (controller->isStable() && millis() >= controller->releaseTimeStart && millis() <= controller->releaseTimeEnd)
-//    {
-//      controller->releaseBall();
-//      controller->decreaseTriggerCount();
-//    }
-//    else if (controller->isStable())
-//      controller->updateReleaseTime();
-      /*
-       * if the rotation is nor stable, then:
-       * 1. wait until enough data needed for computing releaseing time interval are colledted
-       * 2. condition 1 is also the definition of stability
-       *
-       */
-//  }
-
-    /*
      * trigger logic
      */
-//  if (trigger->isChanging())
-//  {
-//    controller->increaseTriggerCount();
-//
-//    Serial.println(controller->triggerCount);
-//    while (trigger->getValue() == 1)
-//    {
-//
-//    }
-//  }
+  if (trigger->isFalling())
+  {
+    controller->increaseTriggerCount();
+    while (true) 
+    {
+      /*
+       * this part is to decide if to release a ball, to release a ball the following conditions must be met:
+       * 1. current time is between the legal time interval
+       * 2. the rotation is stable
+       */
+      if (controller->isStable() && millis() >= controller->releaseTimeStart && millis() <= controller->releaseTimeEnd)
+      {
+        controller->releaseBall();
+        if (controller->decreaseTriggerCount())
+          break;
+      }
+      else if (controller->isStable())
+        controller->updateReleaseTime();
+        /*
+         * if the rotation is not stable, then:
+         * 1. wait until enough data needed for computing releaseing time interval are colledted
+         * 2. condition 1 is also the definition of stability
+         */
+  
+      /*
+       * if the trigger is pressed two times
+       */
+      if (trigger->isFalling())
+        controller->increaseTriggerCount();
+    }
+  }
 }
 
 void photoSensorISR()
 {
-  Serial.print("p,");
-  Serial.print(millis());
-  Serial.print(",");
-  Serial.println(photoSensor->getValue());
-//  controller->updatePhotoBuffer(millis());
-//  
-//  controller->lastPhotoPoint = millis();
+  controller->updatePhotoBuffer(millis());
 }
 
 void hallSensorISR()
 {
-  Serial.print("h,");
-  Serial.print(millis());
-  Serial.print(",");
-  Serial.println(hallSensor->getValue());
-//  if (hallSensor->getValue() == 0)
-//    controller->resetBufferFlag();
-//
-//  controller->updateHallBuffer(millis());
+  if (hallSensor->getValue() == 0)
+    controller->resetBufferFlag();
+
+  controller->updateHallBuffer(millis());
 }
