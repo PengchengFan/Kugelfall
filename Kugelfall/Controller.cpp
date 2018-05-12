@@ -67,7 +67,8 @@ boolean Controller::decreaseTriggerCount()
 
 boolean Controller::isStable()
 {
-  return false;
+  
+  return true;
 }
 
 void Controller::updateReleaseTime()
@@ -82,7 +83,7 @@ void Controller::updateReleaseTime()
 
   releaseTimeEnd = releaseTimeStart + timeInterval / 4;
 
-  predictedPhotoPoint = startPoint + (photoFlag + 1) * timeInterval;
+//  predictedPhotoPoint = startPoint + (photoFlag + 1) * timeInterval;
 }
 
 void Controller::releaseBall()

@@ -70,9 +70,6 @@ class Controller
     // also as the start point for computing the releasing time
     unsigned long lastPhotoPoint;
 
-    // 
-    unsigned long predictedPhotoPoint;
-
     // pointer of servo
     Servomotor *_servo;
 
