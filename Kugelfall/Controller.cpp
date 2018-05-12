@@ -72,15 +72,17 @@ boolean Controller::isStable()
 
 void Controller::updateReleaseTime()
 {
-  unsigned long timeInterval = photoBuffer[photoFlag];
+  unsigned long timeInterval = photoBuffer[0];
 
-  unsigned long startPoint = hallBuffer[hallFlag];
+  unsigned long startPoint = hallBuffer[0];
 
   unsigned long bias = computeBias();
   
   releaseTimeStart = startPoint + timeInterval * 6 - DELAY + bias;
 
-  releaseTimeEnd = releaseTimeStart + timeInterval / 2;
+  releaseTimeEnd = releaseTimeStart + timeInterval / 4;
+
+  predictedPhotoPoint = startPoint + (photoFlag + 1) * timeInterval;
 }
 
 void Controller::releaseBall()
