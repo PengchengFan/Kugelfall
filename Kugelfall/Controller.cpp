@@ -78,9 +78,9 @@ void Controller::updateReleaseTime()
 
   unsigned long bias = computeBias();
   
-  releaseTimeStart = startPoint + timeInterval * 12 - DELAY + bias;
+  releaseTimeStart = startPoint + timeInterval * 6 - DELAY + bias;
 
-  releaseTimeEnd = releaseTimeStart + timeInterval;
+  releaseTimeEnd = releaseTimeStart + timeInterval / 2;
 }
 
 void Controller::releaseBall()

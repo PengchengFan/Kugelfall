@@ -44,7 +44,7 @@ void setup()
   controller = new Controller(servo);
 
   // setup interrupt services
-  attachInterrupt(digitalPinToInterrupt(photoSensorPin), photoSensorISR, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(photoSensorPin), photoSensorISR, RISING);
   attachInterrupt(digitalPinToInterrupt(hallSensorPin), hallSensorISR, CHANGE);
 
   Serial.begin(9600);

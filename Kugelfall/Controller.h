@@ -5,7 +5,7 @@
 #include "Sensor.h"
 #include "Servomotor.h"
 
-#define PHOTOBUFFER_SIZE 12
+#define PHOTOBUFFER_SIZE 6
 #define HALLBUFFER_SIZE 2
 #define DELAY 200
 
