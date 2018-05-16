@@ -22,7 +22,7 @@ boolean Sensor::isFalling()
     
     return true;
   }
-  _status = getValue();
+//  _status = getValue();
   
   return false;
 }
@@ -35,7 +35,7 @@ boolean Sensor::isRising()
     
     return true;
   }
-  _status = getValue();
+//  _status = getValue();
   
   return false;
 }
@@ -48,7 +48,7 @@ boolean Sensor::isChanging()
     
     return true;
   }
-  _status = getValue();
+//  _status = getValue();
   
   return false;
 }

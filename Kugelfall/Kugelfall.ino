@@ -1,6 +1,7 @@
 #include "Sensor.h"
 #include "Actor.h"
 #include "Servomotor.h"
+#include "Disk.h"
 #include "Controller.h"
 
 // initialize pins and components
@@ -26,6 +27,7 @@ Actor *blackled, *led1, *led2;
 Servomotor *servo;
 
 // initialize pointer to the main controller
+Disk *disk;
 Controller *controller;
 
 void setup()
@@ -33,15 +35,17 @@ void setup()
   // initialize objects of components
   photoSensor = new Sensor(photoSensorPin);
   hallSensor = new Sensor(hallSensorPin);
-  trigger = new Sensor(4);
-  Switch = new Sensor(5);
-  button1 = new Sensor(10);
-  button2 = new Sensor(11);
+  trigger = new Sensor(triggerPin);
+  Switch = new Sensor(switchPin);
+  button1 = new Sensor(button1Pin);
+  button2 = new Sensor(button2Pin);
   blackled = new Actor(blackBoxPin);
   led1 = new Actor(led1Pin);
   led2 = new Actor(led2Pin);
   servo = new Servomotor(servoPin);
-  controller = new Controller(servo);
+
+  disk = new Disk();
+  controller = new Controller(servo, disk);
 
   // setup interrupt services
   attachInterrupt(digitalPinToInterrupt(photoSensorPin), photoSensorISR, RISING);
@@ -51,9 +55,9 @@ void setup()
 }
 
 void loop() {
-    /*
-     * trigger logic
-     */
+  /*
+   * trigger logic
+   */
   if (trigger->isFalling())
   {
     controller->increaseTriggerCount();
@@ -64,13 +68,13 @@ void loop() {
        * 1. current time is between the legal time interval
        * 2. the rotation is stable
        */
-      if (controller->isStable() && millis() >= controller->releaseTimeStart && millis() <= controller->releaseTimeEnd)
+      if (disk->isStable() && millis() >= controller->releaseTimeStart && millis() <= controller->releaseTimeEnd)
       {
         controller->releaseBall();
         if (controller->decreaseTriggerCount())
           break;
       }
-      else if (controller->isStable())
+      else if (disk->isStable())
         controller->updateReleaseTime();
         /*
          * if the rotation is not stable, then:
@@ -97,13 +101,13 @@ void loop() {
 
 void photoSensorISR()
 {
-  controller->updatePhotoBuffer(millis());
+  disk->updatePhotoBuffer(millis());
 }
 
 void hallSensorISR()
 {
   if (hallSensor->getValue() == 0)
-    controller->resetBufferFlag();
+    disk->resetBufferFlag();
 
-  controller->updateHallBuffer(millis());
+  disk->updateHallBuffer(millis());
 }
