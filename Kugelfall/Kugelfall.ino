@@ -52,8 +52,10 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(hallSensorPin), hallSensorISR, CHANGE);
 
   Serial.begin(9600);
-}
 
+  Serial.println("Initialization finished");
+}
+int diskFlag = 0;
 void loop() {
   /*
    * trigger logic
@@ -75,7 +77,7 @@ void loop() {
        * 1. current time is between the legal time interval
        * 2. the rotation is stable
        */
-      if (millis() >= controller->releaseTimeStart && millis() <= controller->releaseTimeEnd)
+      if (millis() >= controller->releaseTimeStart && millis() <= controller->releaseTimeEnd && diskFlag % 2 == 0)
       {
         controller->releaseBall();
 //        Serial.print("time for release: ");
@@ -126,6 +128,7 @@ void hallSensorISR()
 {
   if (hallSensor->getValue() == 0)
   {
+    diskFlag ++;
     disk->resetBufferFlag();
     
 //    Serial.print("base time:");
