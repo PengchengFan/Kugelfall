@@ -26,11 +26,13 @@ boolean Controller::decreaseTriggerCount()
 
 void Controller::updateReleaseTime()
 {
-  unsigned long timeInterval = _disk->photoBuffer[0];
+  unsigned long timeInterval = _disk->photoBuffer[1];
 
   unsigned long startPoint = _disk->hallBuffer[1];
 
   unsigned long bias = computeBias();
+
+  
 
   if (timeInterval < SPEEDWALL) 
   {
@@ -59,16 +61,25 @@ void Controller::releaseBall()
 unsigned long Controller::computeBias() 
 {  
   unsigned long timeInterval = _disk->photoBuffer[0];
-  unsigned long bias = 0;
-  
-  if(timeInterval >= 0 && timeInterval < 50)
-    bias = 0;
-  else if (timeInterval >= 50 && timeInterval < 100) 
-    bias = ((0.2 * timeInterval) - 5); 
-  else if (timeInterval >= 100 && timeInterval < 300) 
-    bias = ((0.06 * timeInterval) + 5);
-  else 
-    bias = 15;
+  unsigned long timeInterval2 = _disk->photoBuffer[6];
+  unsigned long bias = timeInterval - timeInterval2;
 
-  return bias;
+  if (timeInterval >= 50 && timeInterval < 140)
+  {
+    Serial.println(1);
+//    bias = ((0.2 * timeInterval) - 5);
+  }
+  else if (timeInterval >= 140 && timeInterval < 500) 
+  {
+    Serial.println(2);
+//    bias = ((0.06 * timeInterval) + 5);
+    
+  }
+  else 
+  {
+    Serial.println(3);
+//    bias = 15;
+    
+  }
+  return 0;
 }
