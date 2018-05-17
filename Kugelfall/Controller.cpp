@@ -64,11 +64,11 @@ unsigned long Controller::computeBias()
   if(timeInterval >= 0 && timeInterval < 50)
     bias = 0;
   else if (timeInterval >= 50 && timeInterval < 100) 
-    bias = ((0.2 * timeInterval) - 10); 
+    bias = ((0.2 * timeInterval) - 5); 
   else if (timeInterval >= 100 && timeInterval < 300) 
-    bias = ((0.06 * timeInterval) + 10);
+    bias = ((0.06 * timeInterval) + 5);
   else 
-    bias = 30;
+    bias = 15;
 
   return bias;
 }
