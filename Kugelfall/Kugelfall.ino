@@ -63,9 +63,9 @@ void loop() {
     controller->increaseTriggerCount();
     controller->updateReleaseTime();
     Serial.print("releaseTimeStart: ");
-    Serial.println(controller->releaseTimeStart);
+    Serial.println(controller->releaseTimeStart + 500);
     Serial.print("releaseTimeEnd: ");
-    Serial.println(controller->releaseTimeEnd);
+    Serial.println(controller->releaseTimeEnd + 500);
     while (true) 
     {
       /*
@@ -77,7 +77,7 @@ void loop() {
       {
         controller->releaseBall();
         Serial.print("time for release: ");
-        Serial.println(millis());
+        Serial.println(millis() + 500);
         disk->stable = 0;
         if (controller->decreaseTriggerCount())
           break;
