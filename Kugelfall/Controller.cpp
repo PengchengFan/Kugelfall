@@ -28,27 +28,25 @@ void Controller::updateReleaseTime()
 {
   unsigned long timeInterval = _disk->photoBuffer[0];
 
-  unsigned long startPoint = _disk->hallBuffer[0];
+  unsigned long startPoint = _disk->hallBuffer[1];
 
-  unsigned long bias = computeBias();
+  unsigned long bias = computeBias(timeInterval);
 
   // if the release time is already passed or not updated, then compute a new release time
-  if (releaseTimeStart > millis())
-  {
-    releaseTimeStart = startPoint + timeInterval * 6 - DELAY + bias;
-    
-    /*
-     *in high speed situation, the release time will be smaller than current time, 
-     *so keep adding the estimated time of another turn, until bigger than current
-     */
-    while (releaseTimeStart < millis())
-    {
-      releaseTimeStart += timeInterval * 6;
-    }
+  releaseTimeStart = startPoint + timeInterval * 6 - DELAY + bias;
   
-//    releaseTimeEnd = releaseTimeStart + timeInterval / 4;
-    releaseTimeEnd = releaseTimeStart + timeInterval;
+  /*
+   *in high speed situation, the release time will be smaller than current time, 
+   *so keep adding the estimated time of another turn, until bigger than current
+   */
+  while (releaseTimeStart < millis())
+  {
+    releaseTimeStart += timeInterval * 6;
   }
+
+//    releaseTimeEnd = releaseTimeStart + timeInterval / 4;
+  releaseTimeEnd = releaseTimeStart + timeInterval;
+  
 }
 
 void Controller::releaseBall()
@@ -56,7 +54,15 @@ void Controller::releaseBall()
   _servo->rotate();
 }
 
-unsigned long Controller::computeBias() 
-{
-  return 0;
+unsigned long Controller::computeBias(unsigned long timeInterval) 
+{  
+  if(timeInterval >= 0 && timeInterval <25) {
+    return 0;
+  } else if (timeInterval >=25 && timeInterval <50) {
+    return ((0.2 * timeInterval) - 5); 
+  } else if (timeInterval >= 50 && timeInterval <150) {
+    return ((0.06 * timeInterval) + 5);
+  } else { //>150
+    return 15;
+  }
 }

@@ -36,8 +36,8 @@ void Disk::updatePhotoBuffer(unsigned long timePoint)
   
   photoBuffer[photoIndex] = timeInterval;
 
-  if (abs(timeInterval - lastInterval) > lastInterval * 0.03)
-    stable = false;
+//  if (abs(timeInterval - lastInterval) > lastInterval * 0.03)
+//    stable = false;
 }
 
 boolean Disk::isStable()

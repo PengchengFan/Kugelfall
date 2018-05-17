@@ -28,10 +28,11 @@ class Disk
 
     // buffer for the time interval between two hall sensor value changes
     unsigned long hallBuffer[HALLBUFFER_SIZE];
-
-  private:
+    
     // to represent if the disk is stable
     boolean stable;
+
+  private:
 
     /*
      * hallIndex and photoIndex represent the model state

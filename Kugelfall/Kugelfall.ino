@@ -61,6 +61,11 @@ void loop() {
   if (trigger->isFalling())
   {
     controller->increaseTriggerCount();
+    controller->updateReleaseTime();
+    Serial.print("releaseTimeStart: ");
+    Serial.println(controller->releaseTimeStart);
+    Serial.print("releaseTimeEnd: ");
+    Serial.println(controller->releaseTimeEnd);
     while (true) 
     {
       /*
@@ -68,14 +73,25 @@ void loop() {
        * 1. current time is between the legal time interval
        * 2. the rotation is stable
        */
-      if (disk->isStable() && millis() >= controller->releaseTimeStart && millis() <= controller->releaseTimeEnd)
+      if (millis() >= controller->releaseTimeStart && millis() <= controller->releaseTimeEnd)
       {
         controller->releaseBall();
+        Serial.print("time for release: ");
+        Serial.println(millis());
+        disk->stable = 0;
         if (controller->decreaseTriggerCount())
           break;
       }
-      else if (disk->isStable())
+      else if (millis() >= controller->releaseTimeEnd)
+      {
+        
+        Serial.print("releaseTimeStart: ");
+        Serial.println(controller->releaseTimeStart + 500);
+        Serial.print("releaseTimeEnd: ");
+        Serial.println(controller->releaseTimeEnd + 500);
+
         controller->updateReleaseTime();
+      }
         /*
          * if the rotation is not stable, then:
          * 1. wait until enough data needed for computing releaseing time interval are colledted
@@ -107,7 +123,11 @@ void photoSensorISR()
 void hallSensorISR()
 {
   if (hallSensor->getValue() == 0)
+  {
     disk->resetBufferFlag();
-
+    
+    Serial.print("base time:");
+    Serial.println(millis());
+  }
   disk->updateHallBuffer(millis());
 }
