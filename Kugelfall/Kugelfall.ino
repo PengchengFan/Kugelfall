@@ -62,10 +62,12 @@ void loop() {
   {
     controller->increaseTriggerCount();
     controller->updateReleaseTime();
-    Serial.print("releaseTimeStart: ");
-    Serial.println(controller->releaseTimeStart + 500);
-    Serial.print("releaseTimeEnd: ");
-    Serial.println(controller->releaseTimeEnd + 500);
+    
+//    Serial.print("releaseTimeStart: ");
+//    Serial.println(controller->releaseTimeStart + 500);
+//    Serial.print("releaseTimeEnd: ");
+//    Serial.println(controller->releaseTimeEnd + 500);
+
     while (true) 
     {
       /*
@@ -76,8 +78,8 @@ void loop() {
       if (millis() >= controller->releaseTimeStart && millis() <= controller->releaseTimeEnd)
       {
         controller->releaseBall();
-        Serial.print("time for release: ");
-        Serial.println(millis() + 500);
+//        Serial.print("time for release: ");
+//        Serial.println(millis() + 500);
         disk->stable = 0;
         if (controller->decreaseTriggerCount())
           break;
@@ -85,10 +87,10 @@ void loop() {
       else if (millis() >= controller->releaseTimeEnd)
       {
         
-        Serial.print("releaseTimeStart: ");
-        Serial.println(controller->releaseTimeStart + 500);
-        Serial.print("releaseTimeEnd: ");
-        Serial.println(controller->releaseTimeEnd + 500);
+//        Serial.print("releaseTimeStart: ");
+//        Serial.println(controller->releaseTimeStart + 500);
+//        Serial.print("releaseTimeEnd: ");
+//        Serial.println(controller->releaseTimeEnd + 500);
 
         controller->updateReleaseTime();
       }
@@ -126,8 +128,8 @@ void hallSensorISR()
   {
     disk->resetBufferFlag();
     
-    Serial.print("base time:");
-    Serial.println(millis());
+//    Serial.print("base time:");
+//    Serial.println(millis());
   }
   disk->updateHallBuffer(millis());
 }

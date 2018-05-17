@@ -7,6 +7,7 @@
 #include "Servomotor.h"
 
 #define DELAY 500
+#define SPEEDWALL 373
 
 /*
  * the job of controller is:
@@ -49,7 +50,7 @@ class Controller
     Servomotor *_servo;
 
     // under different speed, different bias will be computed.
-    unsigned long computeBias(unsigned long timeInterval);
+    unsigned long computeBias();
 };
 
 #endif
