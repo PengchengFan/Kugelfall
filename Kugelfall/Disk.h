@@ -32,14 +32,14 @@ class Disk
     // to represent if the disk is stable
     boolean stable;
 
+    int photoIndex;
+
   private:
 
     /*
      * hallIndex and photoIndex represent the model state
      */
     int hallIndex;
-
-    int photoIndex;
 
     // store the last time point of hall sensor buffer being updated
     unsigned long lastHallPoint;
