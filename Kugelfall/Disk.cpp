@@ -53,3 +53,22 @@ void Disk::resetBufferFlag()
 
   stable = true;
 }
+
+void Disk::printHallBuffer()
+{
+  Serial.println("------------Hall Buffer------------");
+  for (int i=0; i<2; i++)
+  {
+    Serial.println(hallBuffer[i]);
+  }
+}
+
+void Disk::printPhotoBuffer()
+{
+  Serial.println("------------Photo Buffer------------");
+  for (int i=0; i<6; i++)
+  {
+    Serial.println(photoBuffer[i]);
+  }
+}
+
