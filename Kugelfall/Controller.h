@@ -6,7 +6,7 @@
 #include "Disk.h"
 #include "Servomotor.h"
 
-#define DELAY 450
+#define DELAY 500
 #define SPEEDWALL 373
 
 /*
