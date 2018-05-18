@@ -42,9 +42,6 @@ class Controller
     // control servo to rotate, to release a ball
     void releaseBall();
 
-    // under different speed, different bias will be computed.
-    unsigned long updateBias();
-
   private:
     // disk model, to represent model status
     Disk *_disk;
@@ -52,9 +49,8 @@ class Controller
     // a pointer to servo instance, used for servo control
     Servomotor *_servo;
 
-    float bias;
-
-    int biasCount;
+    // under different speed, different bias will be computed.
+    unsigned long computeBias();
 };
 
 #endif

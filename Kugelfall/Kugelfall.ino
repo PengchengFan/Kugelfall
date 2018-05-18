@@ -3,9 +3,6 @@
 #include "Servomotor.h"
 #include "Disk.h"
 #include "Controller.h"
-#include "MsTimer2.h"
-
-#define DEBUG 0
 
 // initialize pins and components
 // set pins of sensors
@@ -53,8 +50,6 @@ void setup()
   // setup interrupt services
   attachInterrupt(digitalPinToInterrupt(photoSensorPin), photoSensorISR, RISING);
   attachInterrupt(digitalPinToInterrupt(hallSensorPin), hallSensorISR, CHANGE);
-//  MsTimer::set(30, triggerISR);
-//  MsTimer::start();
 
   Serial.begin(9600);
 
@@ -68,14 +63,13 @@ void loop() {
   if (trigger->isFalling())
   {
     controller->increaseTriggerCount();
-
-    #ifdef DEBUG
-    Serial.print("next h=0 start: ");
-    Serial.println(controller->releaseTimeStart + DELAY);
-    Serial.print("next h=0 end: ");
-    Serial.println(controller->releaseTimeEnd + DELAY);
-    #endif
+    controller->updateReleaseTime();
     
+//    Serial.print("releaseTimeStart: ");
+//    Serial.println(controller->releaseTimeStart + 500);
+//    Serial.print("releaseTimeEnd: ");
+//    Serial.println(controller->releaseTimeEnd + 500);
+
     while (true) 
     {
       /*
@@ -83,31 +77,25 @@ void loop() {
        * 1. current time is between the legal time interval
        * 2. the rotation is stable
        */
-      if (disk->stable && millis() >= controller->releaseTimeStart && millis() <= controller->releaseTimeEnd && diskFlag % 2 == 0)
+      if (millis() >= controller->releaseTimeStart && millis() <= controller->releaseTimeEnd && diskFlag % 2 == 0)
       {
         controller->releaseBall();
-        
-        #ifdef DEBUG
-        Serial.print("time for release: ");
-        Serial.println(millis());
-        #endif
-        
+//        Serial.print("time for release: ");
+//        Serial.println(millis() + 500);
         disk->stable = 0;
-        
         if (controller->decreaseTriggerCount())
           break;
       }
-//      else if (millis() >= controller->releaseTimeEnd)
-//      {
-//        #ifdef DEBUG
-//        Serial.print("next h=0 start: ");
-//        Serial.println(controller->releaseTimeStart + DELAY);
-//        Serial.print("next h=0 end: ");
-//        Serial.println(controller->releaseTimeEnd + DELAY);
-//        #endif
-//
-//        controller->updateReleaseTime();
-//      }
+      else if (millis() >= controller->releaseTimeEnd)
+      {
+        
+//        Serial.print("releaseTimeStart: ");
+//        Serial.println(controller->releaseTimeStart + 500);
+//        Serial.print("releaseTimeEnd: ");
+//        Serial.println(controller->releaseTimeEnd + 500);
+
+        controller->updateReleaseTime();
+      }
         /*
          * if the rotation is not stable, then:
          * 1. wait until enough data needed for computing releaseing time interval are colledted
@@ -122,46 +110,29 @@ void loop() {
     }
   }
   
+  if (button1->getValue() == 1)
+  {
+    Serial.println(1);
+    controller->releaseBall();
+//    controller->printPhotoBuffer();
+  }
+  
 }
 
 void photoSensorISR()
 {
   disk->updatePhotoBuffer(millis());
-
-  if (disk->photoIndex == 1) 
-    controller->updateReleaseTime();
 }
 
 void hallSensorISR()
 {
-  disk->updateHallBuffer(millis());
-  
   if (hallSensor->getValue() == 0)
   {
     diskFlag ++;
-
-    disk->stable = 0;
-    
     disk->resetBufferFlag();
     
-    controller->updateBias();
-    
-    #ifdef DEBUG
-    Serial.print("next h=0 start: ");
-    Serial.println(controller->releaseTimeStart + DELAY);
-    Serial.print("next h=0 end: ");
-    Serial.println(controller->releaseTimeEnd + DELAY);
-    Serial.print("base time:");
-    Serial.println(millis());
-    #endif
+//    Serial.print("base time:");
+//    Serial.println(millis());
   }
+  disk->updateHallBuffer(millis());
 }
-
-void triggerISR()
-{
-  if (trigger->isFalling())
-  {
-    controller->increaseTriggerCount();
-  }
-}
-
