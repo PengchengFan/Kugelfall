@@ -6,7 +6,7 @@
 #include "Disk.h"
 #include "Servomotor.h"
 
-#define DELAY 650
+#define DELAY 450
 #define SPEEDWALL 373
 
 /*
@@ -52,7 +52,7 @@ class Controller
     // a pointer to servo instance, used for servo control
     Servomotor *_servo;
 
-    float avgBias;
+    float bias;
 
     int biasCount;
 };
