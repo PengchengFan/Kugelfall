@@ -52,8 +52,10 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(hallSensorPin), hallSensorISR, CHANGE);
 
   Serial.begin(9600);
-}
 
+  Serial.println("initialization finished");
+}
+int ballFlag = 0;
 
 void loop() {
   /*
@@ -76,17 +78,23 @@ void loop() {
        * 1. current time is between the legal time interval
        * 2. the rotation is stable
        */
-      if (millis() >= controller->releaseTimeStart && millis() <= controller->releaseTimeEnd && disk->stable)
+      if (millis() >= controller->releaseTimeStart && millis() <= controller->releaseTimeEnd && disk->isStable())
       {
         controller->releaseBall();
+        
+        Serial.print("controller->releaseBall(): ");
+        Serial.println(millis());
+        
+        ballFlag = 1;
         
         disk->stable = 0;
         
         if (controller->decreaseTriggerCount())
           break;
       }
-      else if (millis() >= controller->releaseTimeEnd)
+      else if (disk->isStable())
       {
+//        Serial.println("---------update releasing time--------------");
         controller->updateReleaseTime();
       }
         /*
@@ -102,7 +110,6 @@ void loop() {
         controller->increaseTriggerCount();
     }
   }
-  
 }
 
 void photoSensorISR()
@@ -117,10 +124,13 @@ void hallSensorISR()
   if (hallSensor->getValue() == 1)
   {
     disk->resetBufferFlag();
+//    Serial.print("real meeting time: ");
+//    Serial.println(millis());
   }
-  else
-  {
-    int bias = millis() - (controller->releaseTimeStart + 450);
-    Serial.println(bias);
-  }
+//  else if (ballFlag)
+//  { 
+//    ballFlag = 0;
+//    int bias = millis() - (controller->releaseTimeStart + 450);
+//    Serial.println(bias);
+//  }
 }
