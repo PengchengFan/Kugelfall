@@ -119,18 +119,15 @@ void photoSensorISR()
 
 void hallSensorISR()
 {
-  disk->updateHallBuffer(millis());
+  boolean isUpdated = disk->updateHallBuffer(millis(), hallSensor->getValue());
   
-  if (hallSensor->getValue() == 1)
+  if(!isUpdated)
+  {
+    disk->stable = 0;
+  }
+  
+  if (hallSensor->getValue() == 1 && isUpdated)
   {
     disk->resetBufferFlag();
-//    Serial.print("real meeting time: ");
-//    Serial.println(millis());
   }
-//  else if (ballFlag)
-//  { 
-//    ballFlag = 0;
-//    int bias = millis() - (controller->releaseTimeStart + 450);
-//    Serial.println(bias);
-//  }
 }

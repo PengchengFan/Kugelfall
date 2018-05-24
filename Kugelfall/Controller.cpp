@@ -28,7 +28,7 @@ void Controller::updateReleaseTime()
 {
   unsigned long timeInterval = _disk->photoBuffer[2];
 
-  unsigned long basePoint = _disk->hallBuffer[0];
+  unsigned long basePoint = _disk->hallBuffer[0][0];
 
   unsigned long bias = computeBias();
 

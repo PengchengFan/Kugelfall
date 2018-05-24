@@ -13,15 +13,20 @@ Disk::Disk()
   stable = false;
 }
 
-void Disk::updateHallBuffer(unsigned long timePoint)
+boolean Disk::updateHallBuffer(unsigned long timePoint, int hallValue)
 {
+  
+  if (hallBuffer[hallIndex][1] == hallValue)
+  {
+    return false;
+  }
+  
   hallIndex = (hallIndex + 1) % HALLBUFFER_SIZE;
   
-//  unsigned long timeInterval = timePoint - lastHallPoint;
+  hallBuffer[hallIndex][0] = timePoint;
+  hallBuffer[hallIndex][1] = hallValue;
   
-//  lastHallPoint = timePoint;
-  
-  hallBuffer[hallIndex] = timePoint;
+  return true;
 }
 
 void Disk::updatePhotoBuffer(unsigned long timePoint)
@@ -54,21 +59,4 @@ void Disk::resetBufferFlag()
   stable = true;
 }
 
-void Disk::printHallBuffer()
-{
-  Serial.println("------------Hall Buffer------------");
-  for (int i=0; i<2; i++)
-  {
-    Serial.println(hallBuffer[i]);
-  }
-}
-
-void Disk::printPhotoBuffer()
-{
-  Serial.println("------------Photo Buffer------------");
-  for (int i=0; i<6; i++)
-  {
-    Serial.println(photoBuffer[i]);
-  }
-}
 

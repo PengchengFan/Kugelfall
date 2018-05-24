@@ -12,7 +12,7 @@ class Disk
     Disk();
 
     // store new data in hall sensor buffer
-    void updateHallBuffer(unsigned long timePoint);
+    boolean updateHallBuffer(unsigned long timePoint, int hallValue);
 
     // store new data in photo sensor buffer
     void updatePhotoBuffer(unsigned long timePoint);
@@ -27,7 +27,7 @@ class Disk
     unsigned long photoBuffer[PHOTOBUFFER_SIZE];
 
     // buffer for the time interval between two hall sensor value changes
-    unsigned long hallBuffer[HALLBUFFER_SIZE];
+    unsigned long hallBuffer[HALLBUFFER_SIZE][HALLBUFFER_SIZE];
     
     // to represent if the disk is stable
     boolean stable;
