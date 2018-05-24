@@ -32,10 +32,6 @@ class Disk
     // to represent if the disk is stable
     boolean stable;
 
-    void printHallBuffer();
-
-    void printPhotoBuffer();
-
   private:
 
     /*

@@ -46,11 +46,11 @@ void Controller::updateReleaseTime()
 //    Serial.println("High Speed");
 
     releaseTimeStart += timeInterval * 6;
-  }
     
-//  Serial.print("releaseTimeStart: ");
-//  Serial.println(releaseTimeStart);
-  releaseTimeEnd = releaseTimeStart + timeInterval;
+//    Serial.print("releaseTimeStart: ");
+//    Serial.println(releaseTimeStart);
+  }
+  releaseTimeEnd = releaseTimeStart + timeInterval / 4;
  
 }
 
