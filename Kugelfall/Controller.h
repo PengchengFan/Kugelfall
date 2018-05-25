@@ -6,8 +6,7 @@
 #include "Disk.h"
 #include "Servomotor.h"
 
-#define DELAY 500
-#define SPEEDWALL 373
+#define DELAY 490
 
 /*
  * the job of controller is:

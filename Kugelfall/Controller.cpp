@@ -35,22 +35,16 @@ void Controller::updateReleaseTime()
   // if the release time is already passed or not updated, then compute a new release time
   releaseTimeStart = basePoint + timeInterval * 3 - DELAY + bias;
   
-//  Serial.print("releaseTimeStart: ");
-//  Serial.println(releaseTimeStart);
   /*
    *in high speed situation, the release time will be smaller than current time, 
    *so keep adding the estimated time of another turn, until bigger than current
    */
   while (releaseTimeStart < millis())
   {
-//    Serial.println("High Speed");
-
     releaseTimeStart += timeInterval * 6;
   }
-    
-//  Serial.print("releaseTimeStart: ");
-//  Serial.println(releaseTimeStart);
-  releaseTimeEnd = releaseTimeStart + timeInterval;
+  
+  releaseTimeEnd = releaseTimeStart + timeInterval / 4;
  
 }
 

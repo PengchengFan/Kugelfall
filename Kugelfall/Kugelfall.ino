@@ -4,6 +4,8 @@
 #include "Disk.h"
 #include "Controller.h"
 
+#define TRIGGERDELAY 200
+
 // initialize pins and components
 // set pins of sensors
 const byte photoSensorPin = 2;
@@ -55,7 +57,9 @@ void setup()
 
   Serial.println("initialization finished");
 }
+
 int ballFlag = 0;
+int diskFlag = 0;
 
 void loop() {
   /*
@@ -64,12 +68,10 @@ void loop() {
   if (trigger->isFalling())
   {
     controller->increaseTriggerCount();
-    controller->updateReleaseTime();
+
+    delay(TRIGGERDELAY);
     
-//    Serial.print("releaseTimeStart: ");
-//    Serial.println(controller->releaseTimeStart + 500);
-//    Serial.print("releaseTimeEnd: ");
-//    Serial.println(controller->releaseTimeEnd + 500);
+    controller->updateReleaseTime();
 
     while (true) 
     {
@@ -78,12 +80,9 @@ void loop() {
        * 1. current time is between the legal time interval
        * 2. the rotation is stable
        */
-      if (millis() >= controller->releaseTimeStart && millis() <= controller->releaseTimeEnd && disk->isStable())
+      if (millis() >= controller->releaseTimeStart && millis() <= controller->releaseTimeEnd && disk->isStable() && diskFlag == 2)
       {
         controller->releaseBall();
-        
-        Serial.print("controller->releaseBall(): ");
-        Serial.println(millis());
         
         ballFlag = 1;
         
@@ -119,7 +118,13 @@ void photoSensorISR()
 
 void hallSensorISR()
 {
-  boolean isUpdated = disk->updateHallBuffer(millis(), hallSensor->getValue());
+  unsigned long currentTime = millis();
+  boolean isUpdated = disk->updateHallBuffer(currentTime, hallSensor->getValue());
+
+//  if (ballFlag)
+//  {
+//    Serial.println(hallSensor->getValue());
+//  }
   
   if(!isUpdated)
   {
@@ -128,6 +133,23 @@ void hallSensorISR()
   
   if (hallSensor->getValue() == 1 && isUpdated)
   {
+    diskFlag = (diskFlag + 1) % 3;
+    
     disk->resetBufferFlag();
+  }
+
+  if (hallSensor->getValue() == 0 && ballFlag == 1)
+  {
+    diskFlag = 0;
+//    if (currentTime > (controller->releaseTimeStart + 500))
+//    {
+//      Serial.println(currentTime - (controller->releaseTimeStart + 500));
+//    }
+//    else
+//    {
+//      Serial.print("-");
+//      Serial.println((controller->releaseTimeStart + 500) - currentTime);
+//    }
+    ballFlag = 0;
   }
 }

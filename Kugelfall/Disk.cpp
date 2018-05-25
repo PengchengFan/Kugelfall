@@ -31,18 +31,22 @@ boolean Disk::updateHallBuffer(unsigned long timePoint, int hallValue)
 
 void Disk::updatePhotoBuffer(unsigned long timePoint)
 {
-  unsigned long lastInterval = photoBuffer[photoIndex];
+  int lastInterval = photoBuffer[photoIndex];
   
   photoIndex = (photoIndex + 1) % PHOTOBUFFER_SIZE;
   
-  unsigned long timeInterval = timePoint - lastPhotoPoint;
+  int timeInterval = timePoint - lastPhotoPoint;
   
   lastPhotoPoint = timePoint;
   
   photoBuffer[photoIndex] = timeInterval;
 
-//  if (abs(timeInterval - lastInterval) > lastInterval * 0.03)
+//  if (abs(timeInterval - lastInterval) > lastInterval * 0.1)
+//  {
 //    stable = false;
+//    
+////    Serial.println("untypisch!");
+//  }
 }
 
 boolean Disk::isStable()

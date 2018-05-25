@@ -24,17 +24,13 @@ class Disk
     boolean isStable();
 
     // buffer for the time interval between two photo sensor value changes
-    unsigned long photoBuffer[PHOTOBUFFER_SIZE];
+    int photoBuffer[PHOTOBUFFER_SIZE];
 
     // buffer for the time interval between two hall sensor value changes
     unsigned long hallBuffer[HALLBUFFER_SIZE][HALLBUFFER_SIZE];
     
     // to represent if the disk is stable
     boolean stable;
-
-    void printHallBuffer();
-
-    void printPhotoBuffer();
 
   private:
 
