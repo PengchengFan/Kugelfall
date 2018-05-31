@@ -6,7 +6,7 @@
 #include "Disk.h"
 #include "Servomotor.h"
 
-#define DELAY 500
+#define DELAY 480
 
 /*
  * the job of controller is:
@@ -14,6 +14,7 @@
  * 2. to decide if the rotation is stable
  * 3. to release a ball
  */
+
 class Controller
 {
   public:

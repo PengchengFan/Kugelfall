@@ -21,6 +21,8 @@ boolean Controller::decreaseTriggerCount()
 {
   triggerCount--;
   
+//  Serial.println(_disk->photoBuffer[2]);
+  
   return triggerCount == 0;
 }
 
@@ -33,7 +35,7 @@ void Controller::updateReleaseTime()
   unsigned long bias = computeBias();
 
   // if the release time is already passed or not updated, then compute a new release time
-  releaseTimeStart = basePoint + timeInterval * 3 - DELAY + bias;
+  releaseTimeStart = basePoint + timeInterval * 3 - timeInterval / 8 - DELAY;
   
   /*
    *in high speed situation, the release time will be smaller than current time, 
@@ -41,7 +43,14 @@ void Controller::updateReleaseTime()
    */
   while (releaseTimeStart < millis())
   {
-    releaseTimeStart += timeInterval * 6;
+    if (timeInterval > 90)
+    {
+      releaseTimeStart += timeInterval * 6;
+    }
+    else
+    {
+      releaseTimeStart += (timeInterval * 6 - timeInterval / 20);
+    }
   }
   
   releaseTimeEnd = releaseTimeStart + timeInterval / 4;

@@ -47,6 +47,7 @@ void Disk::updatePhotoBuffer(unsigned long timePoint)
 //    
 ////    Serial.println("untypisch!");
 //  }
+  Serial.println(timeInterval);
 }
 
 boolean Disk::isStable()
@@ -59,6 +60,9 @@ void Disk::resetBufferFlag()
   photoIndex = 0;
 
   hallIndex = 0;
+
+  
+  stable = true;
 }
 
 
