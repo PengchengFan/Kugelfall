@@ -59,8 +59,6 @@ void Disk::resetBufferFlag()
   photoIndex = 0;
 
   hallIndex = 0;
-
-  stable = true;
 }
 
 

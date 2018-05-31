@@ -58,8 +58,8 @@ void setup()
   Serial.println("initialization finished");
 }
 
-int ballFlag = 0;
-int diskFlag = 0;
+//int ballFlag = 0;
+//int diskFlag = 0;
 
 void loop() {
   /*
@@ -80,13 +80,14 @@ void loop() {
        * 1. current time is between the legal time interval
        * 2. the rotation is stable
        */
-      if (millis() >= controller->releaseTimeStart && millis() <= controller->releaseTimeEnd && disk->isStable() && diskFlag == 2)
+//      if (millis() >= controller->releaseTimeStart && millis() <= controller->releaseTimeEnd && disk->isStable() && diskFlag == 2)
+      if (millis() >= controller->releaseTimeStart && millis() <= controller->releaseTimeEnd && disk->isStable())
       {
         controller->releaseBall();
         
-        ballFlag = 1;
+//        ballFlag = 1;
         
-        disk->stable = 0;
+        disk->stable = false;
         
         if (controller->decreaseTriggerCount())
           break;
@@ -109,6 +110,13 @@ void loop() {
         controller->increaseTriggerCount();
     }
   }
+  /*
+   * for debug
+   */
+//  if (button1->isFalling())
+//  {
+//    controller->releaseBall();
+//  }
 }
 
 void photoSensorISR()
@@ -119,37 +127,33 @@ void photoSensorISR()
 void hallSensorISR()
 {
   unsigned long currentTime = millis();
+  
   boolean isUpdated = disk->updateHallBuffer(currentTime, hallSensor->getValue());
 
-//  if (ballFlag)
-//  {
-//    Serial.println(hallSensor->getValue());
-//  }
-  
+  // for debug
+//  Serial.println(hallSensor->getValue());
+
   if(!isUpdated)
   {
-    disk->stable = 0;
+    disk->stable = false;
   }
-  
-  if (hallSensor->getValue() == 1 && isUpdated)
+  else if (hallSensor->getValue() == 1)
   {
-    diskFlag = (diskFlag + 1) % 3;
+//    diskFlag = (diskFlag + 1) % 3;
     
     disk->resetBufferFlag();
   }
-
-  if (hallSensor->getValue() == 0 && ballFlag == 1)
+  else if (hallSensor->getValue() == 0)
   {
-    diskFlag = 0;
-//    if (currentTime > (controller->releaseTimeStart + 500))
-//    {
-//      Serial.println(currentTime - (controller->releaseTimeStart + 500));
-//    }
-//    else
-//    {
-//      Serial.print("-");
-//      Serial.println((controller->releaseTimeStart + 500) - currentTime);
-//    }
-    ballFlag = 0;
+    disk->stable = true;
   }
+
+//  if (hallSensor->getValue() == 0 && ballFlag == 1)
+//  {
+//    diskFlag = 0;
+//    
+//    disk->stable = true;
+//    
+//    ballFlag = 0;
+//  }
 }
