@@ -28,41 +28,91 @@ boolean Controller::decreaseTriggerCount()
 
 void Controller::updateReleaseTime()
 {
-  unsigned long timeInterval = _disk->photoBuffer[2];
-
   unsigned long basePoint = _disk->hallBuffer[0][0];
-
-  unsigned long bias = computeBias();
-
-  // if the release time is already passed or not updated, then compute a new release time
-  releaseTimeStart = basePoint + timeInterval * 3 - timeInterval / 8 - DELAY;
   
-  /*
-   *in high speed situation, the release time will be smaller than current time, 
-   *so keep adding the estimated time of another turn, until bigger than current
-   */
-  while (releaseTimeStart < millis())
+  int timeInterval = _disk->photoBuffer[2];
+
+//  unsigned long bias = computeBias();
+
+  if (timeInterval > 833)
   {
-    if (timeInterval > 90)
+    Serial.println("Exceeding the minimum speed");
+//    continue;
+  }
+  else if (timeInterval < 55)
+  {
+    Serial.println("Exceeding the maximum speed");
+//    continue;
+  }
+  else if (timeInterval < 80)
+  {
+    int sumInterval = 0;
+    
+    for (int i = 0; i < PHOTOBUFFER_SIZE; i++)
+    {
+      sumInterval += _disk->photoBuffer[i];
+    }
+    
+    sumInterval += _disk->photoBuffer[3];
+    sumInterval += _disk->photoBuffer[4];
+    sumInterval += _disk->photoBuffer[5];
+    
+    releaseTimeStart = basePoint + sumInterval - timeInterval / 8 - DELAY;
+  }
+  else if (timeInterval < 160)
+  {
+    int sumInterval = 0;
+    
+    for (int i = 0; i < PHOTOBUFFER_SIZE; i++)
+    {
+      sumInterval += _disk->photoBuffer[i];
+    }
+    sumInterval += _disk->photoBuffer[3];
+    sumInterval += _disk->photoBuffer[4];
+    sumInterval += _disk->photoBuffer[5];
+    
+    releaseTimeStart = basePoint + sumInterval * 1.01 - timeInterval / 8 - DELAY;
+  }
+  else 
+  {
+    int sumInterval = 0;
+    
+    sumInterval += _disk->photoBuffer[3];
+    sumInterval += _disk->photoBuffer[4];
+    sumInterval += _disk->photoBuffer[5];
+    
+    releaseTimeStart = basePoint + sumInterval - timeInterval / 8 - DELAY;
+    
+    /*
+     *in high speed situation, the release time will be smaller than current time, 
+     *so keep adding the estimated time of another turn, until bigger than current
+     */
+    while (releaseTimeStart < millis())
     {
       releaseTimeStart += timeInterval * 6;
-    }
-    else
-    {
-      releaseTimeStart += (timeInterval * 6 - timeInterval / 20);
     }
   }
   
   releaseTimeEnd = releaseTimeStart + timeInterval / 4;
- 
+  
 }
 
 void Controller::releaseBall()
 {
   _servo->rotate();
+  
+  Serial.println(_disk->photoBuffer[2]);
 }
 
-unsigned long Controller::computeBias() 
+int Controller::computeBias() 
 {
+  if (_disk->photoBuffer[2] > _disk->photoBuffer[1])
+  {
+    return -1;
+  }
+  else if (_disk->photoBuffer[2] < _disk->photoBuffer[1])
+  {
+    return 1;
+  }
   return 0;
 }

@@ -58,7 +58,7 @@ void setup()
   Serial.println("initialization finished");
 }
 
-int ballFlag = 0;
+//int ballFlag = 0;
 int diskFlag = 0;
 
 void loop() {
@@ -80,12 +80,12 @@ void loop() {
        * 1. current time is between the legal time interval
        * 2. the rotation is stable
        */
-      if (millis() >= controller->releaseTimeStart && millis() <= controller->releaseTimeEnd && disk->isStable() && diskFlag == 2)
-//      if (millis() >= controller->releaseTimeStart && millis() <= controller->releaseTimeEnd && disk->isStable())
+//      if (millis() >= controller->releaseTimeStart && millis() <= controller->releaseTimeEnd && disk->isStable() && diskFlag == 2)
+      if (millis() >= controller->releaseTimeStart && millis() <= controller->releaseTimeEnd && disk->isStable())
       {
         controller->releaseBall();
         
-        ballFlag = 1;
+//        ballFlag = 1;
         
         disk->stable = false;
         
@@ -151,12 +151,13 @@ void hallSensorISR()
     
     disk->resetBufferFlag();
   }
-  else if (hallSensor->getValue() == 0 && ballFlag == 1)
+//  else if (hallSensor->getValue() == 0 && ballFlag == 1)
+  else if (hallSensor->getValue() == 0 && diskFlag == 2)
   {
-    diskFlag = 0;
+//    diskFlag = 0;
     
     disk->stable = true;
     
-    ballFlag = 0;
+//    ballFlag = 0;
   }
 }

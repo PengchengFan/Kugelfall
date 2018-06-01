@@ -50,7 +50,7 @@ class Controller
     Servomotor *_servo;
 
     // under different speed, different bias will be computed.
-    unsigned long computeBias();
+    int computeBias();
 };
 
 #endif
