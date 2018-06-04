@@ -47,6 +47,8 @@ void Disk::updatePhotoBuffer(unsigned long timePoint)
 //    
 ////    Serial.println("untypisch!");
 //  }
+  if (timeInterval > 160)
+    stable = true;
 }
 
 boolean Disk::isStable()

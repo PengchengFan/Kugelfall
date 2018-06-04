@@ -34,66 +34,50 @@ void Controller::updateReleaseTime()
 
 //  unsigned long bias = computeBias();
 
-  if (timeInterval > 833)
+  int sumInterval = 0;
+  
+  sumInterval += _disk->photoBuffer[3];
+  sumInterval += _disk->photoBuffer[4];
+  sumInterval += _disk->photoBuffer[5];
+  
+  if (timeInterval > 70)
   {
     Serial.println("Exceeding the minimum speed");
-//    continue;
   }
   else if (timeInterval < 55)
   {
     Serial.println("Exceeding the maximum speed");
-//    continue;
   }
-  else if (timeInterval < 80)
+  else if (timeInterval < 70)
   {
-    int sumInterval = 0;
+//    for (int i = 0; i < PHOTOBUFFER_SIZE; i++)
+//    {
+//      sumInterval += _disk->photoBuffer[i];
+//    }
     
-    for (int i = 0; i < PHOTOBUFFER_SIZE; i++)
-    {
-      sumInterval += _disk->photoBuffer[i];
-    }
-    
-    sumInterval += _disk->photoBuffer[3];
-    sumInterval += _disk->photoBuffer[4];
-    sumInterval += _disk->photoBuffer[5];
-    
-    releaseTimeStart = basePoint + sumInterval - timeInterval / 8 - DELAY;
+    releaseTimeStart = basePoint + sumInterval * 3 - DELAY - 16;
   }
   else if (timeInterval < 160)
   {
-    int sumInterval = 0;
     
     for (int i = 0; i < PHOTOBUFFER_SIZE; i++)
     {
       sumInterval += _disk->photoBuffer[i];
     }
-    sumInterval += _disk->photoBuffer[3];
-    sumInterval += _disk->photoBuffer[4];
-    sumInterval += _disk->photoBuffer[5];
     
-    releaseTimeStart = basePoint + sumInterval * 1.01 - timeInterval / 8 - DELAY;
+    releaseTimeStart = basePoint + sumInterval - DELAY - 16;
   }
   else 
   {
-    int sumInterval = 0;
-    
-    sumInterval += _disk->photoBuffer[3];
-    sumInterval += _disk->photoBuffer[4];
-    sumInterval += _disk->photoBuffer[5];
-    
     releaseTimeStart = basePoint + sumInterval - timeInterval / 8 - DELAY;
     
     /*
      *in high speed situation, the release time will be smaller than current time, 
      *so keep adding the estimated time of another turn, until bigger than current
      */
-    while (releaseTimeStart < millis())
-    {
-      releaseTimeStart += timeInterval * 6;
-    }
   }
   
-  releaseTimeEnd = releaseTimeStart + timeInterval / 4;
+  releaseTimeEnd = releaseTimeStart + timeInterval / 8;
   
 }
 
