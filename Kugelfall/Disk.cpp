@@ -10,23 +10,40 @@ Disk::Disk()
 
   lastPhotoPoint = 0;
 
+  diskFlag = 0;
+
   stable = false;
 }
 
-boolean Disk::updateHallBuffer(unsigned long timePoint, int hallValue)
+void Disk::updateHallBuffer(unsigned long timePoint, int hallValue)
 {
-  
+
+  //  test if the interrupt is valid
   if (hallBuffer[hallIndex][1] == hallValue)
   {
-    return false;
+    stable = false;
+
+    return;
   }
-  
+
+  // if the interrupt is valid
   hallIndex = (hallIndex + 1) % HALLBUFFER_SIZE;
   
   hallBuffer[hallIndex][0] = timePoint;
   hallBuffer[hallIndex][1] = hallValue;
   
-  return true;
+  if (hallValue == 1)
+  {
+    diskFlag = (diskFlag + 1) % 3;
+    
+    resetBufferFlag();
+  }
+  
+  if (diskFlag == 2)
+  {
+    stable = true;
+  }
+  
 }
 
 void Disk::updatePhotoBuffer(unsigned long timePoint)
@@ -41,14 +58,18 @@ void Disk::updatePhotoBuffer(unsigned long timePoint)
   
   photoBuffer[photoIndex] = timeInterval;
 
-//  if (abs(timeInterval - lastInterval) > lastInterval * 0.1)
-//  {
-//    stable = false;
-//    
-////    Serial.println("untypisch!");
-//  }
+  //  to detect unusual movement
+  if (abs(timeInterval - lastInterval) > lastInterval * MOVE_FACTOR)
+  {
+    stable = false;
+    
+    Serial.println("untypische Bewegung");
+  }
+
   if (timeInterval > 160)
+  {
     stable = true;
+  }
 }
 
 boolean Disk::isStable()

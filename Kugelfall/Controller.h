@@ -7,6 +7,8 @@
 #include "Servomotor.h"
 
 #define DELAY 480
+#define MIN_INTERVAL 55
+#define MAX_INTERVAL 833
 
 /*
  * the job of controller is:

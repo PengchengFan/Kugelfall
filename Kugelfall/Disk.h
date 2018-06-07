@@ -5,6 +5,7 @@
 
 #define PHOTOBUFFER_SIZE 6
 #define HALLBUFFER_SIZE 2
+#define MOVE_FACTOR 0.1
 
 class Disk 
 {
@@ -12,7 +13,7 @@ class Disk
     Disk();
 
     // store new data in hall sensor buffer
-    boolean updateHallBuffer(unsigned long timePoint, int hallValue);
+    void updateHallBuffer(unsigned long timePoint, int hallValue);
 
     // store new data in photo sensor buffer
     void updatePhotoBuffer(unsigned long timePoint);
@@ -28,6 +29,8 @@ class Disk
 
     // buffer for the time interval between two hall sensor value changes
     unsigned long hallBuffer[HALLBUFFER_SIZE][HALLBUFFER_SIZE];
+
+    int diskFlag;
     
     // to represent if the disk is stable
     boolean stable;

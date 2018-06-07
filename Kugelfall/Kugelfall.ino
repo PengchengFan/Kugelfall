@@ -32,6 +32,8 @@ Servomotor *servo;
 Disk *disk;
 Controller *controller;
 
+int diskFlag = 0;
+
 void setup()
 {
   // initialize objects of components
@@ -58,8 +60,6 @@ void setup()
   Serial.println("initialization finished");
 }
 
-int diskFlag = 0;
-
 void loop() {
   /*
    * trigger logic
@@ -83,24 +83,19 @@ void loop() {
       {
         controller->releaseBall();
         
-//        ballFlag = 1;
-        
-        disk->stable = false;
-        
         if (controller->decreaseTriggerCount())
+        {
           break;
+        }
       }
+      /*
+       * if the legal time interval is arrving or has already left
+       * calculate a new time interval for releasing ball
+       */
       else if (disk->isStable())
       {
-//        Serial.println("---------update releasing time--------------");
         controller->updateReleaseTime();
       }
-        /*
-         * if the rotation is not stable, then:
-         * 1. wait until enough data needed for computing releaseing time interval are colledted
-         * 2. condition 1 is also the definition of stability
-         */
-  
       /*
        * if the trigger is pressed two times
        */
@@ -111,20 +106,12 @@ void loop() {
   /*
    * for debug
    */
-  if (button1->isFalling())
-  {
-    controller->releaseBall();
-
-    Serial.println("release a ball");
-  }
-  /*
-   * analog read trigger
-   */
-//  Serial.println(analogRead(triggerPin));
-  /*
-   * analog read hallsensor
-   */
-//   Serial.println(analogRead(hallSensorPin));
+//  if (button1->isFalling())
+//  {
+//    controller->releaseBall();
+//
+//    Serial.println("release a ball");
+//  }
 }
 
 void photoSensorISR()
@@ -133,30 +120,9 @@ void photoSensorISR()
 }
 
 void hallSensorISR()
-{
-  unsigned long currentTime = millis();
-  
-  boolean isUpdated = disk->updateHallBuffer(currentTime, hallSensor->getValue());
+{ 
+  disk->updateHallBuffer(millis(), hallSensor->getValue());
 
   // for debug
 //  Serial.println(hallSensor->getValue());
-
-  if(!isUpdated)
-  {
-    disk->stable = false;
-  }
-  else if (hallSensor->getValue() == 1)
-  {
-    diskFlag = (diskFlag + 1) % 3;
-    
-    disk->resetBufferFlag();
-  }
-  else if (hallSensor->getValue() == 0 && diskFlag == 2)
-  {
-//    diskFlag = 0;
-    
-    disk->stable = true;
-    
-//    ballFlag = 0;
-  }
 }
