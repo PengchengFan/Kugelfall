@@ -6,6 +6,7 @@
 #include "Disk.h"
 #include "Servomotor.h"
 
+#define TRIGGERDELAY 200
 #define DELAY 480
 #define MIN_INTERVAL 55
 #define MAX_INTERVAL 833

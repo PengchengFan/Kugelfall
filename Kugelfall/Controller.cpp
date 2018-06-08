@@ -11,6 +11,8 @@ Controller::Controller(Servomotor *servo, Disk *disk)
 
 void Controller::increaseTriggerCount()
 {
+  delay(TRIGGERDELAY);
+  
   if (triggerCount == 0)
   {
     triggerCount = 1;
@@ -39,12 +41,12 @@ void Controller::updateReleaseTime()
   sumInterval += _disk->photoBuffer[3];
   sumInterval += _disk->photoBuffer[4];
   sumInterval += _disk->photoBuffer[5];
-    
+  
   /*
    *in high speed situation, the release time will be smaller than current time, 
    *so keep adding the estimated time of another turn, until bigger than current
    */
-  if (timeInterval > 80)
+  if (timeInterval > MAX_INTERVAL)
   {
     Serial.println("Exceeding the minimum speed");
 
@@ -68,10 +70,10 @@ void Controller::updateReleaseTime()
   {
     releaseTimeStart = basePoint + sumInterval * 3 - DELAY - 10;
   }
-//  else if (timeInterval < 130)
-//  {
-//    releaseTimeStart = basePoint + sumInterval * 3 - DELAY - 16;
-//  }
+  else if (timeInterval < 130)
+  {
+    releaseTimeStart = basePoint + sumInterval * 3 - DELAY - 16;
+  }
   else if (timeInterval < 160)
   {
     releaseTimeStart = basePoint + sumInterval * 3 - DELAY - 16;
@@ -89,7 +91,7 @@ void Controller::releaseBall()
 
   _disk->stable = false;
 
-  Serial.println(_disk->photoBuffer[2]);
+//  Serial.println(_disk->photoBuffer[2]);
 }
 
 int Controller::computeBias() 

@@ -4,7 +4,6 @@
 #include "Disk.h"
 #include "Controller.h"
 
-#define TRIGGERDELAY 200
 
 // initialize pins and components
 // set pins of sensors
@@ -67,8 +66,6 @@ void loop() {
   if (trigger->isFalling())
   {
     controller->increaseTriggerCount();
-
-    delay(TRIGGERDELAY);
     
     controller->updateReleaseTime();
 
@@ -100,7 +97,9 @@ void loop() {
        * if the trigger is pressed two times
        */
       if (trigger->isFalling())
+      {
         controller->increaseTriggerCount();
+      }
     }
   }
   /*
