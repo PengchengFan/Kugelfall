@@ -6,7 +6,8 @@
 #include "Actor.h"
 
 #define START_POS 0
-#define END_POS 20
+#define END_POS 23
+#define SERVO_DELAY 160
 
 class Servomotor: public Servo, public Actor
 {

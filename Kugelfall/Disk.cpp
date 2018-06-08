@@ -39,7 +39,8 @@ void Disk::updateHallBuffer(unsigned long timePoint, int hallValue)
     resetBufferFlag();
   }
   
-  if (diskFlag == 2)
+  //if (diskFlag == 2)
+  if (hallValue == 0)
   {
     stable = true;
   }

@@ -56,25 +56,37 @@ void Controller::updateReleaseTime()
 
     return;
   }
+  else if (timeInterval < 130)
+  {
+    releaseTimeStart = basePoint + sumInterval * 3 - DELAY - 10;
+  }
+  else if (timeInterval < 65)
+  {
+    releaseTimeStart = basePoint + sumInterval * 3 - DELAY - 13;
+  }
   else if (timeInterval < 70)
-  { 
+  {
+    releaseTimeStart = basePoint + sumInterval * 3 - DELAY - 10;
+  }
+  else if (timeInterval < 130)
+  {
     releaseTimeStart = basePoint + sumInterval * 3 - DELAY - 16;
   }
   else if (timeInterval < 160)
   {
     
-    for (int i = 0; i < PHOTOBUFFER_SIZE; i++)
-    {
-      sumInterval += _disk->photoBuffer[i];
-    }
+    //for (int i = 0; i < PHOTOBUFFER_SIZE; i++)
+    //{
+    //  sumInterval += _disk->photoBuffer[i];
+    //}
     
-    releaseTimeStart = basePoint + sumInterval - DELAY - 16;
+    //releaseTimeStart = basePoint + sumInterval - DELAY - 16;
+    releaseTimeStart = basePoint + sumInterval * 3 - DELAY - 16;
   }
   else 
   {
     releaseTimeStart = basePoint + sumInterval - timeInterval / 8 - DELAY;
   }
-
   releaseTimeEnd = releaseTimeStart + timeInterval / 8;
 }
 
@@ -83,7 +95,7 @@ void Controller::releaseBall()
   _servo->rotate();
 
   _disk->stable = false;
-  
+
   Serial.println(_disk->photoBuffer[2]);
 }
 
