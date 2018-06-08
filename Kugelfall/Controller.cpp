@@ -44,7 +44,7 @@ void Controller::updateReleaseTime()
    *in high speed situation, the release time will be smaller than current time, 
    *so keep adding the estimated time of another turn, until bigger than current
    */
-  if (timeInterval > MAX_INTERVAL)
+  if (timeInterval > 80)
   {
     Serial.println("Exceeding the minimum speed");
 
@@ -56,7 +56,7 @@ void Controller::updateReleaseTime()
 
     return;
   }
-  else if (timeInterval < 130)
+  else if (timeInterval < 60)
   {
     releaseTimeStart = basePoint + sumInterval * 3 - DELAY - 10;
   }
@@ -68,19 +68,12 @@ void Controller::updateReleaseTime()
   {
     releaseTimeStart = basePoint + sumInterval * 3 - DELAY - 10;
   }
-  else if (timeInterval < 130)
-  {
-    releaseTimeStart = basePoint + sumInterval * 3 - DELAY - 16;
-  }
+//  else if (timeInterval < 130)
+//  {
+//    releaseTimeStart = basePoint + sumInterval * 3 - DELAY - 16;
+//  }
   else if (timeInterval < 160)
   {
-    
-    //for (int i = 0; i < PHOTOBUFFER_SIZE; i++)
-    //{
-    //  sumInterval += _disk->photoBuffer[i];
-    //}
-    
-    //releaseTimeStart = basePoint + sumInterval - DELAY - 16;
     releaseTimeStart = basePoint + sumInterval * 3 - DELAY - 16;
   }
   else 
