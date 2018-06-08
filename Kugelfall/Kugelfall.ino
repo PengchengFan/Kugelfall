@@ -66,8 +66,6 @@ void loop() {
   if (trigger->isFalling())
   {
     controller->increaseTriggerCount();
-    
-    controller->updateReleaseTime();
 
     while (true) 
     {

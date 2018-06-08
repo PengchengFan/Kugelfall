@@ -37,7 +37,7 @@ void Controller::updateReleaseTime()
   int timeInterval = _disk->photoBuffer[2];
 
   int sumInterval = 0;
-  
+
   sumInterval += _disk->photoBuffer[3];
   sumInterval += _disk->photoBuffer[4];
   sumInterval += _disk->photoBuffer[5];
@@ -70,10 +70,6 @@ void Controller::updateReleaseTime()
   {
     releaseTimeStart = basePoint + sumInterval * 3 - DELAY - 10;
   }
-  else if (timeInterval < 130)
-  {
-    releaseTimeStart = basePoint + sumInterval * 3 - DELAY - 16;
-  }
   else if (timeInterval < 160)
   {
     releaseTimeStart = basePoint + sumInterval * 3 - DELAY - 16;
@@ -92,17 +88,4 @@ void Controller::releaseBall()
   _disk->stable = false;
 
 //  Serial.println(_disk->photoBuffer[2]);
-}
-
-int Controller::computeBias() 
-{
-  if (_disk->photoBuffer[2] > _disk->photoBuffer[1])
-  {
-    return -1;
-  }
-  else if (_disk->photoBuffer[2] < _disk->photoBuffer[1])
-  {
-    return 1;
-  }
-  return 0;
 }
