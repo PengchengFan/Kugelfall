@@ -15,7 +15,8 @@
  * the job of controller is:
  * 1. to compute the time for releasing a ball
  * 2. to decide if the rotation is stable
- * 3. to release a ball
+ * 3. to record trigger count
+ * 4. to release a ball
  */
 
 class Controller
@@ -30,9 +31,6 @@ class Controller
     // end of the legal time interval for releaseing a ball
     unsigned long releaseTimeEnd;
 
-    // count of the times that trigger is pulled
-    int triggerCount;
-
     // if trigger is pulled, increase the count for one
     void increaseTriggerCount();
 
@@ -46,14 +44,14 @@ class Controller
     void releaseBall();
 
   private:
+    // count of the times that trigger is pulled
+    int triggerCount;
+    
     // disk model, to represent model status
     Disk *_disk;
 
     // a pointer to servo instance, used for servo control
     Servomotor *_servo;
-
-    // under different speed, different bias will be computed.
-    int computeBias();
 };
 
 #endif

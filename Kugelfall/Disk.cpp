@@ -10,8 +10,6 @@ Disk::Disk()
 
   lastPhotoPoint = 0;
 
-  diskFlag = 0;
-
   stable = false;
 }
 
@@ -34,12 +32,8 @@ void Disk::updateHallBuffer(unsigned long timePoint, int hallValue)
   
   if (hallValue == 1)
   {
-    diskFlag = (diskFlag + 1) % 3;
-    
     resetBufferFlag();
   }
-  
-  //if (diskFlag == 2)
   if (hallValue == 0)
   {
     stable = true;
@@ -64,12 +58,7 @@ void Disk::updatePhotoBuffer(unsigned long timePoint)
   {
     stable = false;
     
-    Serial.println("untypische Bewegung");
-  }
-
-  if (timeInterval > 160)
-  {
-    stable = true;
+    Serial.println("unusual Movement");
   }
 }
 

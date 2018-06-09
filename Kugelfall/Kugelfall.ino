@@ -4,7 +4,6 @@
 #include "Disk.h"
 #include "Controller.h"
 
-
 // initialize pins and components
 // set pins of sensors
 const byte photoSensorPin = 2;

@@ -29,8 +29,6 @@ class Disk
 
     // buffer for the time interval between two hall sensor value changes
     unsigned long hallBuffer[HALLBUFFER_SIZE][HALLBUFFER_SIZE];
-
-    int diskFlag;
     
     // to represent if the disk is stable
     boolean stable;
