@@ -30,8 +30,6 @@ Servomotor *servo;
 Disk *disk;
 Controller *controller;
 
-int diskFlag = 0;
-
 void setup()
 {
   // initialize objects of components

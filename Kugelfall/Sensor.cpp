@@ -42,7 +42,7 @@ boolean Sensor::isRising()
 
 boolean Sensor::isChanging() 
 {
-  if (_status == 1 && getValue() == 0) 
+  if (isFalling() || isRising()) 
   {
     _status = getValue();
     

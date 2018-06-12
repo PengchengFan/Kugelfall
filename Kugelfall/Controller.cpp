@@ -38,6 +38,8 @@ void Controller::updateReleaseTime()
 
   int sumInterval = 0;
 
+//  int correction = computeCorrection(timeInterval);
+
   sumInterval += _disk->photoBuffer[3];
   sumInterval += _disk->photoBuffer[4];
   sumInterval += _disk->photoBuffer[5];
@@ -74,10 +76,11 @@ void Controller::updateReleaseTime()
   {
     releaseTimeStart = basePoint + sumInterval * 3 - DELAY - 16;
   }
-  else 
+  else
   {
     releaseTimeStart = basePoint + sumInterval - timeInterval / 8 - DELAY;
   }
+  
   releaseTimeEnd = releaseTimeStart + timeInterval / 8;
 }
 
@@ -87,5 +90,5 @@ void Controller::releaseBall()
 
   _disk->stable = false;
 
-//  Serial.println(_disk->photoBuffer[2]);
+  Serial.println(_disk->photoBuffer[2]);
 }
